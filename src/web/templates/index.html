@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript" src="/static/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="/static/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet" href="/static/css/tempusdominus-bootstrap-4.min.css"/>
+<script type="text/javascript" src="/static/js/index.js"></script>
+{% endblock %}
+{% block container %}
+<h2>Задать параметры</h2>
+<form method="POST" action="/" novalidate>
+    <div class="btn-group btn-group-toggle py-2" data-toggle="buttons" id="fg-var">
+        <label class="btn btn-outline-primary active">
+            <input type="radio" name="option" id="real" autocomplete="off" onfocus="RadioButtonReal()" checked value="1">Реальная
+            ситуация
+        </label>
+        <label class="btn btn-outline-primary">
+            <input type="radio" name="option" id="model" autocomplete="off" onfocus="RadioButtonModel()" value="0">Модель
+        </label>
+    </div>
+    <div class="form-group" id="fg-cam">
+        <label for="camera">Камера</label>
+        <select class="form-control" name="camera" id="cameras_list"> {# Откуда брать список камер с адресами? #}
+            {% for camera in cameras_list %}
+            <option id="{{ camera.id }}">[{{ camera.id }}] {{ camera.location }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="form-group col-lg-2" id="fg-date">
+            <label for="datepicker">Дата</label>
+            <div class="input-group date" id="datepicker" data-target-input="nearest">
+                <input type="text" id="date" name="date" min="2018-07-14" class="form-control datetimepicker-input"
+                       data-target="#datepicker">
+                <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-lg-2" id="fg-time">
+            <label for="timepicker">Время</label>
+            <div class="input-group date" id="timepicker" data-target-input="nearest">
+                <input type="text" id="time" name="time" class="form-control datetimepicker-input"
+                       data-target="#timepicker">
+                <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+                $(function () {
+                    $('#datepicker').datetimepicker({
+                        format: "L",
+                        locale: "ru"
+                    });
+                    $('#timepicker').datetimepicker({
+                        format: "HH:mm:ss",
+                        locale: "ru"
+                    });
+                });
+
+        </script>
+    </div>
+    <label for="weather">Погода</label>
+    <div class="form-row align-items-center" id="weather">
+        <div class="form-group col-lg-3">
+            <div class="input-group">
+                <input type="number" id="temperature" name="temperature" min="-50" max="50" class="form-control"
+                       placeholder="Температура" disabled>
+                <div class="input-group-append">
+                    <span class="input-group-text">°C</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-lg-3">
+            <div class="input-group">
+                <select class="form-control" name="precip" id="precip" disabled onchange="OpenIntens(this.form)">
+                    <option disabled selected>Выбрать осадки...</option>
+                    {% for p, i in precip %}
+                    <option value="{{ i }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-lg-3">
+            <div class="input-group">
+                <select class="form-control" name="intens" id="intens" disabled>
+                    <option disabled selected>Выбрать интенсивность осадков...</option>
+                    {% for p, i  in intens %}
+                    <option value="{{ i }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="holidays">Праздники</label>
+        <textarea class="form-control" id="holidays" rows="3" disabled></textarea>
+    </div>
+    <div class="form-group">
+        <label for="news">Новости</label>
+        <textarea class="form-control" id="news" rows="3" disabled></textarea>
+    </div>
+    <div class="form-group">
+        <label for="cars-speed">Cкорость потока</label>
+        <div class="input-group">
+            <input type="number" id="cars-speed" name="speed" min="0" max="150" class="form-control"
+                   placeholder="Скорость потока" disabled>
+            <div class="input-group-append">
+                <span class="input-group-text">км/ч</span>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+
+{% endblock %}

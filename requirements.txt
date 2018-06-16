@@ -1,0 +1,6 @@
+bs4
+catboost
+flask
+pandas
+requests
+lxml
